@@ -1,0 +1,54 @@
+{# To render links to the dashboards #}
+{# To render the panbels: #}
+{# If on a dashboard, also pass in: #}
+{#      dashboard id as dashboard_id #}
+{#      is_owner if the dashboard is owned by the current user #}
+{# all_panels - list of all the panels #}
+{# Each panels need #}
+{#      panel.is_owner - determines whether the current user is the owner of the panel #}
+{#      panel.id - the id of the panel from the table #}
+{#      panel.title - the title of the panel #}
+{#      panel.found - whether or not the panel was found for the API request #}
+{#      panel.url - the url of the repo/user #}
+{#      panel.snippet - the snippet to use #}
+{#      panel.data - the data for the panel #}
+{#      panel.size - the size for the panel #}
+
+<div class="row">
+    {% for panel in all_panels %}
+        <div class="card 
+            {% if panel.size == "small" %}
+                col-md-4
+            {% elif panel.size == "medium" %}
+                col-md-6
+            {% elif panel.size == "large" %}
+                col-md-12
+            {% endif %}
+            ">
+            <div class="card-title"><h5>{{panel.title}}</h5></div>
+            <div class="card-subtitle"><a href="{{panel.url}}" class="btn btn-secondary" target="_blank">On GitHub</a>
+            {% if is_owner and dashboard in request.get_full_path %}
+                <a href="{% url 'remove_panel' dashboard_id=dashboard panel_id=panel.id %}" class="btn btn-danger">Remove from Dashboard</a>
+            {% endif %}
+            </div>
+            <div class="card-body">
+                <p>
+                    {% if panel.found %}
+                        {% include panel.snippet with data=panel.data %}
+                    {% else %}
+                        No such user/repo.
+                    {% endif %}    
+                    </p>
+                <a href="{% url 'add_panel' panel.id%}" class="btn btn-primary">Add</a>
+                {% if panel.is_owner %}
+                    <a href="{% url 'edit_panel' panel.id %}" class="btn btn-secondary">Edit</a>
+                    <a href="{% url 'delete_panel' panel.id %}" class="btn btn-danger">Delete</a>
+                {% endif %}
+            </div>
+        </div>
+    {% empty %}
+    <ul>
+        <li>No panels made yet.</li>
+    </ul>
+    {% endfor %}
+</div>

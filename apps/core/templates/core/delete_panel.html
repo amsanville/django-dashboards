@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if is_owner %}
+<p>
+    Are you sure you want to delete this panel permanently?
+</p>
+
+<form class="form-signin" method="POST"> 
+    {% csrf_token %}
+    <input type="submit" name="action" value="Yes" />
+    <input type="submit" name="action" value="No" />
+</form>
+{% else %}
+    You do not own this panel.
+{% endif %}
+{% endblock %}

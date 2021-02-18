@@ -1,0 +1,38 @@
+{# Snippet for rendering list-style charts #}
+{# Context for snippet: data, which is a list of dictionaries with the following keys: #}
+{#      name - the name of the repo #}
+{#      size - the size of the repo #}
+{#      stargazers_count - the count of stars on the repo (a GitHub thing) #}
+{#      language - the main language used in the repo #}
+{#      html_url - the url location of the repo #}
+
+<table class="table mt-5">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Size</th>
+            <th scope="col">Stars</th>
+            <th scope="col">Language</th>
+            <th score="col">Link</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for repo in data %}
+        <tr>
+            <th>{{repo.name}}</th>
+            <td>{{repo.size}}</td>
+            <td>
+                {% if repo.stargazers_count > 0 %}
+                {{repo.stargazers_count}}<span class="fa fa-star gold-star"></span>
+                {% endif %}
+            </td>
+            <td>{{repo.language}}</td>
+            <td>
+            <form action="{{ repo.html_url }}" target="_blank">
+                <input type="submit" value="Go to Repo"/>
+            </form>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

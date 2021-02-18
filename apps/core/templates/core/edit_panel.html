@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if is_owner %}
+{% include "accounts/form_snippet.html" with form_title="Edit Panel" %}
+{% else %}
+    You do not own this panel.
+{% endif %}
+{% endblock %}

@@ -1,0 +1,7 @@
+<ul>
+    {% for dashboard in all_dashboards %}
+            <li><a href="{% url 'view_dashboard' dashboard_id=dashboard.id%}">{{dashboard.title | title }}</a></li>
+    {% empty %}
+        <li>No dashboards made yet.</li>
+    {% endfor %}
+</ul>

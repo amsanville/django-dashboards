@@ -1,0 +1,8 @@
+{# Snippet for rendering bar chart of the languages used #}
+{# See custom template tag for details (in core_extras.py) #}
+
+{% load core_extras %}
+<div>
+    {% render_bar data as chart %}
+    <embed type="image/svg+xml" src="{{ chart | safe }}" />
+</div>

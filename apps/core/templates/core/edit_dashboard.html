@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if is_owner %}
+{% include "accounts/form_snippet.html" with form_title="Edit Dashboard" %}
+{% else %}
+    You do not own this Dashboard.
+{% endif %}
+{% endblock %}}

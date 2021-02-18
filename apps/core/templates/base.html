@@ -1,0 +1,79 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>{{title | title}}</title>
+    <!-- CDN link for bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"/>
+    <!-- CDN link for icons from Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"/>
+    <link href="{% static 'css/testsite.css' %}" rel="stylesheet">
+</head>
+
+<body>
+    {% if request.user.is_authenticated %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1>{{title | title}}</h1>
+            </div>
+            <div class="col">
+                <h1>Welcome, {{request.user.username}}! </h1>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <h1>{{title | title}} </h1>
+    {% endif %}
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <div class="container">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'all_users' %}">All Users</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'all_dashboards' %}">All Dashboards</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_profile' user_id=request.user.id %}">Profile</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'sign_up' %}">Sign Up</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container card opaque-card content-card">
+        {% block main %}
+            {# Enable Django's "messages" system #}
+            {# Check for message -> for each message -> print message with proper tags #}
+            {# Recall that the alert tags in bootstrap do different things (mainly assign colors) #}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+            
+            {% block content %}
+                <p>Be sure to override the "content" template tag!</p>
+            {% endblock content %}
+        {% endblock main %}
+    </div>
+</body>
+
+</html>

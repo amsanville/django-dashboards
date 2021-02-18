@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+
+{% block content %}
+<div class="row">
+    {% if is_owner %}
+    <div class="col">
+        <a type="Button" class="btn btn-secondary" href="{% url 'edit_dashboard' dashboard_id=dashboard %}">Edit Dashboard</a>
+    </div>
+    <div class="col">
+        <a type="Button" class="btn btn-danger" href="{% url 'delete_dashboard' dashboard_id=dashboard %}">Delete Dashboard</a>
+    </div>
+    {% endif %}
+    <div class="col">
+        <a type="Button" class="btn btn-primary" href="#">Like Dashboard</a>
+    </div>
+    <div class="col">
+        Likes: {{ like_count }}
+    </div>
+</div>
+<p></p>
+{% include 'snippets/all_panels.html' with all_panels=all_panels dashboard_id=dashboard_id is_owner=is_owner %}
+{% endblock %}

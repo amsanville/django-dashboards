@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block content %}
+<h2>Welcome to Django Dashboard Viewer</h2>
+<p>
+    This app allows users to make collections of charts based on data gathered from Github. Feel free to poke around and see what there is to see.
+</p>
+<p>
+    <a href="{% url 'all_users' %}"" class="btn btn-primary btn-lg">All Users</a>
+</p>
+<p>
+    <a href="{% url 'all_dashboards' %}" class="btn btn-primary btn-lg">All Dashboards</a>
+</p>
+
+{% endblock %}

@@ -1,0 +1,8 @@
+{% load bootstrap4 %}
+
+<h5 class="card-title text-center">{{ form_title }}</h5>
+<form class="form-signin" method="POST">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    <button class="btn btn-primary" type="submit">{{ form_title }}</button>
+</form>

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<form action="{% url 'logout' %}">
+    <input type="submit" value="Logout" />
+</form>
+{% else %}
+{% include "accounts/form_snippet.html" with form_title="Login" %}
+{% endif %}
+{% endblock %}

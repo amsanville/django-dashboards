@@ -1,0 +1,31 @@
+
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block content %}
+{% if is_viewing_self %}
+<div class="row">
+    <div class="col">
+        <a type="Button" class="btn btn-secondary" href="{% url 'create_dashboard' %}">Create Dashboard</a>
+    </div>
+    <div class="col">
+        <a type="Button" class="btn btn-secondary" href="{% url 'create_panel' %}">Create Panel</a>
+    </div>
+    <div class="col">
+        <a type="Button" class="btn btn-secondary" href="{% url 'edit_profile' request.user.id %}">Edit Profile</a>
+    </div>
+    <div class="col">
+        <a type="Button" class="btn btn-secondary" href="{% url 'logout' %}">Logout</a>
+    </div>
+</div>
+<p></p>
+{% endif %}
+{# List dashboards #}
+<h3>{{title}}'s Dashboards</h3>
+<div class="row">
+    {% include 'snippets/dashboard_list.html' with all_dashboards=all_dashboards %}
+</div>
+{# List all the panels #}
+<h3>{{title}}'s Panels</h3>
+{% include 'snippets/all_panels.html' with all_panels=all_panels %}
+{% endblock %}
