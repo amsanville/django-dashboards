@@ -7,9 +7,6 @@ from apps.core.forms import CreateDashboardForm, EditDashboardForm, CreatePanelF
 from apps.core.models import Panel, Dashboard
 from apps.core.helper import gen_panel_data
 
-# Cached address to go back to from posted forms. This effectively allows me to record where a view based on a form came from in order to be able to redirect them there.
-where_from = None
-
 # Create your views here.
 def home(request):
     '''
@@ -201,9 +198,8 @@ def add_panel(request, panel_id):
     Add panel to the specified dashboard.
     '''
     # Set the redirect
-    global where_from
-    if where_from is None:
-        where_from = request.META.get('HTTP_REFERER', '/')
+    if request.session.get('where_from', None) is None:
+        request.session['where_from'] = request.META.get('HTTP_REFERER', '/')
 
     # Loads the instance of the panel panel
     curr_panel = Panel.objects.get(id=panel_id)
@@ -214,11 +210,11 @@ def add_panel(request, panel_id):
         if form.is_valid():
             # Save and message the user
             form.save()
-            message.success('Check the dashboard for changes.')
+            messages.success(request, 'Check the dashboard for changes.')
             
             # Return to the previous page
-            temp = where_from
-            where_from = None
+            temp = request.session['where_from']
+            request.session['where_from'] = None
             return HttpResponseRedirect(temp)
     else:
         form = AddPanelForm(request.POST, user=request.user, instance=curr_panel)
@@ -236,9 +232,8 @@ def edit_panel(request, panel_id):
     Edit the panel specified.
     '''
     # Set the redirect
-    global where_from
-    if where_from is None:
-        where_from = request.META.get('HTTP_REFERER', '/')
+    if request.session.get('where_from', None) is None:
+        request.session['where_from'] = request.META.get('HTTP_REFERER', '/')
 
     # Validate that the person editing the panel owns the panel
     context = {
@@ -254,8 +249,8 @@ def edit_panel(request, panel_id):
                 form.save()
                 messages.success(request, 'Successfully edited the panel.')
                 # Return to the previous page
-                temp = where_from
-                where_from = None
+                temp = request.session['where_from']
+                request.session['where_from'] = None
                 return HttpResponseRedirect(temp)
         else:
             form = EditPanelForm(instance=curr_panel)
@@ -270,9 +265,9 @@ def delete_panel(request, panel_id):
     Delete the specified panel
     '''
     # Set the redirect
-    global where_from
-    if where_from is None:
-        where_from = request.META.get('HTTP_REFERER', '/')
+
+    if request.session.get('where_from', None) is None:
+        request.session['where_from'] = request.META.get('HTTP_REFERER', '/')
 
     # Initialize the context
     context = {
@@ -294,7 +289,7 @@ def delete_panel(request, panel_id):
             messages.warning(request, 'Panel deleted.')
 
             # Redirect back to where they were
-            temp = where_from
-            where_from = None
+            temp = request.session['where_from']
+            request.session['where_from'] = None
             return HttpResponseRedirect(temp)
     return render(request, 'core/delete_panel.html', context)
